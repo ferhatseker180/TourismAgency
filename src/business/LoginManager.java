@@ -3,6 +3,7 @@ package business;
 import dao.LoginDao;
 import entity.User;
 import view.AdminGUI;
+import view.EmployeeGUI;
 
 import javax.swing.*;
 
@@ -14,7 +15,8 @@ public class LoginManager {
         this.loginDao = loginDao;
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                 UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
 
