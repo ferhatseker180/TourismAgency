@@ -293,7 +293,8 @@ public class HotelDetailDao {
 
 
     public boolean deleteHotelPension(int pensionID) {
-        try (PreparedStatement ps = DBConnector.getPreparedStatement("DELETE FROM tbl_hotel_pension WHERE id=" + pensionID)) {
+        try (PreparedStatement ps = DBConnector.getPreparedStatement("DELETE FROM tbl_hotel_pension WHERE pension_id=?")) {
+            ps.setInt(1, pensionID);
             int result = ps.executeUpdate();
             ps.close();
             return result != -1;

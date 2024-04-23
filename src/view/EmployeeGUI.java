@@ -18,7 +18,7 @@ public class EmployeeGUI extends Layout {
     private JTabbedPane tabbedPane1;
     private User employee;
     private JPanel pnl_hotel;
-    private JTable tbl_hotel; // gui den gelen jtable
+    private JTable tbl_hotel;
     private JTextField fld_hotel_name;
     private JTextField fld_hotel_email;
     private JTextField fld_hotel_phoneNumber;
@@ -31,9 +31,9 @@ public class EmployeeGUI extends Layout {
     private JComboBox cmb_childNumber;
     private JComboBox cmb_adultNumber;
     private JButton btn_search;
-    DefaultTableModel mdl_hotel_list; // veri set etmek için oluşturdumğum tbl
+    DefaultTableModel mdl_hotel_list;
     private Object[] row_hotel_list;
-    private JPopupMenu tbl_hotel_PopupMenu; // otel listesinde gezinirken employeenin yapacağı işlemleri gösteren menüler için tanımlandı
+    private JPopupMenu tbl_hotel_PopupMenu;
     private JTable tbl_search;
     private JTextArea fld_hotelFeatures;
     private JTextArea fld_roomFeatures;
@@ -70,11 +70,10 @@ public class EmployeeGUI extends Layout {
                 return super.isCellEditable(row, column);
             }
         };
-        // Kullanıcının göreceği listeye col isimleri veridi
         Object[] col_hotel_list = {"ID", "Hotel Name", "City", "Region", "Address", "Email", "Phone Number", "Stars"};
         mdl_hotel_list.setColumnIdentifiers(col_hotel_list);
         row_hotel_list = new Object[col_hotel_list.length];
-        tbl_hotel.setModel(mdl_hotel_list); // son olarak default table, J table setlendi.
+        tbl_hotel.setModel(mdl_hotel_list);
         tbl_hotel.getTableHeader().setReorderingAllowed(false);
         tbl_hotel.addMouseListener(new MouseAdapter() {
             @Override
@@ -82,13 +81,13 @@ public class EmployeeGUI extends Layout {
                 tbl_hotel.setRowSelectionInterval(tbl_hotel.rowAtPoint(e.getPoint()), tbl_hotel.rowAtPoint(e.getPoint()));
             }
         });
-        // employee ilgili oteli seçip clic yaptıktan sonra otelle ilgili işlemleri gerçekleştirebilecek
+        // After selecting the relevant hotel and clicking, the employee will be able to perform hotel-related operations
         tbl_hotel_PopupMenu = new JPopupMenu();
         tbl_hotel_PopupMenu.add("Manage").addActionListener(e -> {
             int selectedHotelID = Integer.parseInt(tbl_hotel.getValueAt(tbl_hotel.getSelectedRow(), 0).toString());
             HotelDetailGUI detailGUI = new HotelDetailGUI(employeeManager.getHotelByID(selectedHotelID));
         });
-        // otel bilgilerinin güncellenmesi
+        // update hotel knowledge
         tbl_hotel_PopupMenu.add("Update").addActionListener(e -> {
             int selectedHotelID = this.getTableSelectedRow(tbl_hotel, 0);
             Hotel selectedHotel = this.employeeManager.getHotelByID(selectedHotelID);
@@ -108,52 +107,49 @@ public class EmployeeGUI extends Layout {
                 Helper.showMessage("done");
             }
         });
-        tbl_hotel.setComponentPopupMenu(tbl_hotel_PopupMenu); // menülerin çalışması için en son setledik
+        tbl_hotel.setComponentPopupMenu(tbl_hotel_PopupMenu);
         loadHotelTable();
-        // rezervasyonların listeleneceği tablonun oluşturulması
+        // create list of reservation table
         mdl_rezervations = new DefaultTableModel();
         mdl_rezervations.setColumnIdentifiers(new Object[]{"Reservation ID", "Hotel ID", "Hotel", "Room ID", "Name", "TC. No", "Phone Number", "Email", "Child Count", "Adult Count"});
         row_rezervations = new Object[10];
-        tbl_rezervations.setModel(mdl_rezervations); // tabloyu görebilmemiz için en son setleme işlemini yapmalıyız
+        tbl_rezervations.setModel(mdl_rezervations);
         tbl_rezervations.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 tbl_rezervations.setRowSelectionInterval(tbl_rezervations.rowAtPoint(e.getPoint()), tbl_rezervations.rowAtPoint(e.getPoint()));
             }
         });
-        // rezervayon bilgilerinin güncellenmesi
+        // Update reservation knowledge
         JPopupMenu tbl_rezervations_popup = new JPopupMenu();
         tbl_rezervations_popup.add("Update").addActionListener(e -> {
-            if (tbl_search.getSelectedRow() != -1) {
-                int adult_number = Integer.parseInt((String) cmb_adultNumber.getSelectedItem());
-                int child_number = Integer.parseInt((String) cmb_childNumber.getSelectedItem());
-                int child_price = Integer.parseInt(tbl_search.getValueAt(tbl_search.getSelectedRow(), 14).toString());
-                int adult_price = Integer.parseInt(tbl_search.getValueAt(tbl_search.getSelectedRow(), 15).toString());
-                System.out.println(adult_number + ", " + child_number + ", " + adult_price + ", " + child_price);
+            // Take choose of user's reservation col index
+            int selectedRow = tbl_rezervations.getSelectedRow();
+            if (selectedRow != -1) {
+                // Take user's reservation index
+                int reservationID = Integer.parseInt(tbl_rezervations.getValueAt(selectedRow, 0).toString());
 
-                // Düzenleme olup olmadığını kontrol et
-                if (tbl_rezervations.getCellEditor() != null) {
-                    tbl_rezervations.getCellEditor().stopCellEditing();
-                }
+                // Take data from users
+                String customerName = (String) tbl_rezervations.getValueAt(selectedRow, 4);
+                String customerTc = (String) tbl_rezervations.getValueAt(selectedRow, 5);
+                String customerPhone = (String) tbl_rezervations.getValueAt(selectedRow, 6);
+                String customerEmail = (String) tbl_rezervations.getValueAt(selectedRow, 7);
+                int childNumber = Integer.parseInt(tbl_rezervations.getValueAt(selectedRow, 8).toString());
+                int adultNumber = Integer.parseInt(tbl_rezervations.getValueAt(selectedRow, 9).toString());
 
-                if (employeeManager.updateReservation(
-                        Integer.parseInt(tbl_rezervations.getValueAt(tbl_rezervations.getSelectedRow(), 0).toString()),
-                        (String) tbl_rezervations.getValueAt(tbl_rezervations.getSelectedRow(), 4),
-                        (String) tbl_rezervations.getValueAt(tbl_rezervations.getSelectedRow(), 5),
-                        (String) tbl_rezervations.getValueAt(tbl_rezervations.getSelectedRow(), 6),
-                        (String) tbl_rezervations.getValueAt(tbl_rezervations.getSelectedRow(), 7),
-                        Integer.parseInt(tbl_rezervations.getValueAt(tbl_rezervations.getSelectedRow(), 8).toString()),
-                        Integer.parseInt(tbl_rezervations.getValueAt(tbl_rezervations.getSelectedRow(), 9).toString())
-                )) {
+                // Call update
+                if (employeeManager.updateReservation(reservationID, customerName, customerTc, customerPhone, customerEmail, childNumber, adultNumber)) {
+                    // If update procesess is succesfull, it update list of reservation
                     loadRezervationList();
-                    Helper.showMessage("done");
+                    Helper.showMessage("Reservation updated successfully.");
+                } else {
+                    Helper.showMessage("Error occurred while updating reservation.");
                 }
             } else {
-                // Seçili bir satır yoksa uyarı ver
-                Helper.showMessage("Please select a row.");
+                Helper.showMessage("Please select a row to update.");
             }
         });
-        tbl_rezervations_popup.add("Sil").addActionListener(e -> {
+        tbl_rezervations_popup.add("Delete").addActionListener(e -> {
             if (employeeManager.deleteReservation(Integer.parseInt(tbl_rezervations.getValueAt(tbl_rezervations.getSelectedRow(), 0).toString()))) {
                 employeeManager.increaseStock(Integer.parseInt(tbl_rezervations.getValueAt(tbl_rezervations.getSelectedRow(), 3).toString()));
                 loadRezervationList();
@@ -162,7 +158,7 @@ public class EmployeeGUI extends Layout {
         });
         tbl_rezervations.setComponentPopupMenu(tbl_rezervations_popup);
         loadRezervationList();
-        // Arama sonuçlarının listeleneceği tablo
+        // List of search result
         mdl_search = new DefaultTableModel();
         mdl_search.setColumnIdentifiers(new Object[]{"Season", "Season Start Date", "Season Finish Date", "Hotel", "City", "District", "Address",
                 "Email", "Phone Number", "Stars", "Pension", "Room Type", "Bed Count", "Available Room", "Child Price", "Adult Price", "Hotel ID", "Room ID"});
