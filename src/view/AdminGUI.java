@@ -68,17 +68,17 @@ public class AdminGUI extends Layout {
                     cmb_userType.getSelectedItem().toString()
             )) {
                 loadPersonelTable();
-                Helper.showMsg("Başarılı", "Kullanıcı Güncellendi");
+                Helper.showMessage("done");
             } else {
-                Helper.showMsg("Hata", "Beklenmeyen bir hata oluştu !");
+                Helper.showMessage("error");
             }
         });
         tbl_personel_popup.add("Sil").addActionListener(e -> {
             if (adminManager.deleteUser(Integer.parseInt(tbl_personel.getValueAt(tbl_personel.getSelectedRow(), 0).toString()))) {
                 loadPersonelTable();
-                Helper.showMsg("Başarılı", "Kullanıcı Silindi");
+                Helper.showMessage("done");
             } else {
-                Helper.showMsg("Hata", "Beklenmeyen bir hata oluştu !");
+                Helper.showMessage("error");
             }
         });
         tbl_personel.setComponentPopupMenu(tbl_personel_popup);
@@ -86,7 +86,7 @@ public class AdminGUI extends Layout {
         btn_addUser.addActionListener(e -> {
             if (Helper.isFieldEmpty(fld_tcNo) || Helper.isFieldEmpty(fld_userName) || Helper.isFieldEmpty(fld_password) ||
                     Helper.isFieldEmpty(fld_name) || Helper.isFieldEmpty(fld_surname)) {
-                Helper.showMsg("Uyarı !", "İlgili alanları doldurunuz");
+                Helper.showMessage("fill");
             } else {
                 if (adminManager.addUser(
                         fld_tcNo.getText(),
@@ -97,7 +97,7 @@ public class AdminGUI extends Layout {
                         cmb_userType.getSelectedItem().toString()
                 )) {
                     loadPersonelTable();
-                    Helper.showMsg("Başarılı", "Kullanıcı Eklendi");
+                    Helper.showMessage("done");
                 }
             }
         });

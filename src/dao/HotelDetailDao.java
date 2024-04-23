@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class EmployeeHotelDetailDao {
+public class HotelDetailDao {
     public ArrayList<Season> getSeasonListByHotelID(int hotelID) {
         ArrayList<Season> list = new ArrayList<>();
         try (ResultSet rs = DBConnector.getPreparedStatement("SELECT season_id,season_name,start_date,end_date FROM tbl_season WHERE hotel_id=" + hotelID).executeQuery()) {
@@ -260,7 +260,7 @@ public class EmployeeHotelDetailDao {
             ps.close();
             return result != -1;
         } catch (Exception e) {
-            Helper.showMsg("Hata", "Veri Tabanı Hatası!!!");
+            Helper.showMessage("databaseError");
         }
         return false;
     }
@@ -272,7 +272,7 @@ public class EmployeeHotelDetailDao {
             ps.close();
             return result != -1;
         } catch (Exception e) {
-            Helper.showMsg("Hata", "Veri Tabanı Hatası!!!");
+            Helper.showMessage("databaseError");
         }
         return false;
     }
@@ -286,7 +286,7 @@ public class EmployeeHotelDetailDao {
             ps.close();
             return result != -1;
         } catch (Exception e) {
-            Helper.showMsg("Hata", "Veri Tabanı Hatası!!!");
+            Helper.showMessage("databaseError");
         }
         return false;
     }
@@ -298,7 +298,7 @@ public class EmployeeHotelDetailDao {
             ps.close();
             return result != -1;
         } catch (Exception e) {
-            Helper.showMsg("Hata", "Veri Tabanı Hatası!!!");
+            Helper.showMessage("databaseError");
         }
         return false;
     }
@@ -311,7 +311,7 @@ public class EmployeeHotelDetailDao {
             ps.close();
             return result != -1;
         } catch (Exception e) {
-            Helper.showMsg("Hata", "Veri Tabanı Hatası!!!");
+            Helper.showMessage("databaseError");
         }
         return false;
     }

@@ -9,6 +9,15 @@ public class User {
     private String surname;
     private String userType;
 
+    public User(){}
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public User(int userID, String tcNo, String username, String password, String name, String surname, String userType) {
         this.userID = userID;
         this.tcNo = tcNo;

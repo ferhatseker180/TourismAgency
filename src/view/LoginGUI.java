@@ -1,45 +1,60 @@
 package view;
 
 import business.LoginManager;
+import business.UserManager;
 import core.Helper;
+import entity.User;
 
 import javax.swing.*;
 
 public class LoginGUI extends Layout {
     private JPanel container;
-    private JTextField fld_username_tcno;
-    private JPasswordField fld_password;
+    private JRadioButton rd_admin;
+    private JRadioButton rd_employee;
+    private JTextField login_username_fld;
+    private JPasswordField login_password_fld;
     private JButton btn_login;
     private LoginManager loginManager;
+    private UserManager userManager;
+    private User user;
+    String selectedRole;
 
     public LoginGUI(LoginManager loginManager) {
         this.loginManager = loginManager;
+        this.userManager = new UserManager();
 
-        try {
-            // nimbus teması kullanıldı
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
-                 UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-        SwingUtilities.invokeLater(() -> {
-            add(container);
-            guiInitialize(350, 250);
+        this.add(container);
+        this.guiInitialize(500, 500);
 
-            // login butonu için action listener oluştruldu
-            btn_login.addActionListener(e -> {
-                // ilgili alanların doluluğu kontrol edilir
-                if (Helper.isFieldEmpty(fld_username_tcno) || Helper.isFieldEmpty(fld_password)) {
-                    Helper.showMsg("Hata", "Lütfen ilgili alanları doldurunuz");
-                } else {
-                    // giriş işleminin gerçekleşmesi için kontroller yapılır
-                    if (loginManager.login(fld_username_tcno.getText(), fld_password.getText())) {
-                        dispose();
-                    } else {
-                        Helper.showMsg("Uyarı", "Kullanıcı adı veya şifre hatalı !");
-                    }
+        btn_login.addActionListener(e -> {
+            JTextField[] checkedList = {this.login_username_fld, this.login_password_fld};
+            JRadioButton[] checkedRadioList = {this.rd_admin, this.rd_employee};
+            if (Helper.isFieldListEmpty(checkedList) || Helper.isRadioButtonListEmpty(checkedRadioList)) {
+                Helper.showMessage("fill");
+            } else {
+                if (this.rd_admin.isSelected()) {
+                    selectedRole = "admin";
                 }
-            });
+                if (this.rd_employee.isSelected()) {
+                    selectedRole = "employee";
+                }
+                User loginUser = this.userManager.findByLogin(this.login_username_fld.getText().trim(), this.login_password_fld.getText().trim(), selectedRole);
+                if (loginUser == null) {
+                    Helper.showMessage("notFound");
+                } else {
+                    if (this.rd_admin.isSelected()) {
+                        AdminGUI adminGUI = new AdminGUI(loginUser);
+                        System.out.println("You are being redirected to the Admin Page...");
+                        dispose();
+                    }
+                    if (this.rd_employee.isSelected()) {
+                        EmployeeGUI employeeGUI = new EmployeeGUI(loginUser);
+                        System.out.println("You will be redirected to the Worker page...");
+                        dispose();
+                    }
+
+                }
+            }
         });
     }
 }

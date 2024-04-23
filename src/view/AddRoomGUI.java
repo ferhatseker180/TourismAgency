@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class AddRoomPropertyGUI extends Layout {
+public class AddRoomGUI extends Layout {
     private JPanel container;
     private JTextField txt_room_property;
     private JButton btn_addRoomFeature;
@@ -22,7 +22,7 @@ public class AddRoomPropertyGUI extends Layout {
     private Object[] row_room_property;
     int roomID;
 
-    public AddRoomPropertyGUI(EmployeeHotelDetailManager detailManager, int roomID) {
+    public AddRoomGUI(EmployeeHotelDetailManager detailManager, int roomID) {
         this.detailManager = detailManager;
         this.roomID = roomID;
         add(container);
@@ -54,11 +54,11 @@ public class AddRoomPropertyGUI extends Layout {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (Helper.isFieldEmpty(txt_room_property)) {
-                    Helper.showMsg("Uyarı", "Eksik metin");
+                    Helper.showMessage("fill");
                 } else {
                     if (detailManager.addHotelRoomProperty(roomID, txt_room_property.getText())) {
                         loadRoomPropertyList();
-                        Helper.showMsg("Başarılı", "Başarıyla Eklendi");
+                        Helper.showMessage("done");
                     }
                 }
             }

@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class EmployeeHotelDetailGUI extends Layout {
+public class HotelDetailGUI extends Layout {
     private Hotel hotel;
     private EmployeeHotelDetailManager detailManager = new EmployeeHotelDetailManager();
     private JPanel container;
@@ -46,7 +46,7 @@ public class EmployeeHotelDetailGUI extends Layout {
     DefaultTableModel mdl_room;
     private Object[] row_room;
 
-    public EmployeeHotelDetailGUI(Hotel hotel) {
+    public HotelDetailGUI(Hotel hotel) {
         this.hotel = hotel;
         this.add(container);
         guiInitialize(1000, 500);
@@ -68,9 +68,9 @@ public class EmployeeHotelDetailGUI extends Layout {
         tbl_season_popup.add("Sil").addActionListener(e -> {
             if (detailManager.deleteSeason(Integer.parseInt(tbl_season.getValueAt(tbl_season.getSelectedRow(), 0).toString()))) {
                 loadSeasonList();
-                Helper.showMsg("Başarılı", "Otel sezon silindi !");
+                Helper.showMessage("done");
             } else {
-                Helper.showMsg("Uyarı!", "Otel sezon silerken hata oluştu");
+                Helper.showMessage("error");
             }
         });
         tbl_season.setComponentPopupMenu(tbl_season_popup);
@@ -93,9 +93,9 @@ public class EmployeeHotelDetailGUI extends Layout {
         tbl_pension_popup.add("Delete").addActionListener(e -> {
             if (detailManager.deleteHotelPension(Integer.parseInt(tbl_pension.getValueAt(tbl_pension.getSelectedRow(), 0).toString()))) {
                 loadPensionList();
-                Helper.showMsg("Başarılı", "Pansiyon Silindi");
+                Helper.showMessage("done");
             } else {
-                Helper.showMsg("Uyarı", "Pansiyon silerken hata oluştu !");
+                Helper.showMessage("error");
             }
         });
         tbl_pension.setComponentPopupMenu(tbl_pension_popup);
@@ -119,14 +119,13 @@ public class EmployeeHotelDetailGUI extends Layout {
             if (detailManager.deleteHotelFeature(hotel.getHotelID(),
                     tbl_hotel_feature.getValueAt(tbl_hotel_feature.getSelectedRow(), 0).toString())) {
                 loadHotelFeatureList();
-                Helper.showMsg("Başarılı", "Pansiyon silindi");
+                Helper.showMessage("done");
             } else {
-                Helper.showMsg("Uyarı", "Pansiyon silinirken hata oluştu");
+                Helper.showMessage("error");
             }
         });
         tbl_hotel_feature.setComponentPopupMenu(tbl_hotelFeature_popup);
         loadHotelFeatureList();
-        // tabloda yapılan değişiklikleri görmek için  loadHotelFeatureList() metodu çağrılır
 
         // odanın listeleneceği tabloyu oluşturma
         mdl_room = new DefaultTableModel();
@@ -145,7 +144,7 @@ public class EmployeeHotelDetailGUI extends Layout {
         // Oda özelliği ekleme
         tbl_room_popup.add("Oda özelliği ekle").addActionListener(e -> {
             int id = Integer.parseInt(tbl_room.getValueAt(tbl_room.getSelectedRow(), 0).toString());
-            AddRoomPropertyGUI addRoomProperty = new AddRoomPropertyGUI(detailManager, id);
+            AddRoomGUI addRoomProperty = new AddRoomGUI(detailManager, id);
         });
 
         // Oda bilgisi güncelleme
@@ -160,9 +159,9 @@ public class EmployeeHotelDetailGUI extends Layout {
                         Integer.parseInt(tbl_room.getValueAt(tbl_room.getSelectedRow(), 7).toString())
                 )) {
                     loadHotelRoomList();
-                    Helper.showMsg("Başarılı", "Güncelleme işlemi başarılı");
+                    Helper.showMessage("done");
                 } else {
-                    Helper.showMsg("Uyarı", "Güncelleme işlemi başarısız");
+                    Helper.showMessage("error");
                 }
             }
         });
@@ -170,7 +169,7 @@ public class EmployeeHotelDetailGUI extends Layout {
         tbl_room_popup.add("Sil").addActionListener(e -> {
             if (detailManager.deleteRoom((int) tbl_room.getValueAt(tbl_room.getSelectedRow(), 0))) {
                 loadHotelRoomList();
-                Helper.showMsg("Başarılı", "Silme işlemi başarılı");
+                Helper.showMessage("done");
             }
         });
         tbl_room.setComponentPopupMenu(tbl_room_popup);
@@ -191,7 +190,7 @@ public class EmployeeHotelDetailGUI extends Layout {
                         formatDate(fld_season_endDate.getText()))) {
                     loadSeasonList();
                     loadRoomSeasonCombobox();
-                    Helper.showMsg("Başarılı", "Sezon başarıyla eklendi");
+                    Helper.showMessage("done");
                 }
             }
         });
@@ -205,7 +204,7 @@ public class EmployeeHotelDetailGUI extends Layout {
                 );
                 loadPensionList();
                 loadRoomPensionCombobox();
-                Helper.showMsg("Başarılı", "Ekleme işlemi gerçekleşti");
+                Helper.showMessage("done");
             }
         });
         // Otellere özellik eklenmesi
@@ -217,7 +216,7 @@ public class EmployeeHotelDetailGUI extends Layout {
                         ((HotelFeature) cmb_hotelFeatures.getSelectedItem()).getFeatureName()
                 );
                 loadHotelFeatureList();
-                Helper.showMsg("Başarılı", "Ekleme işlemi başarılı");
+                Helper.showMessage("done");
             }
 
         });
@@ -225,7 +224,7 @@ public class EmployeeHotelDetailGUI extends Layout {
         // otellere oda ekleme
         btn_addHotelRoom.addActionListener(e -> {
             if (Helper.isFieldEmpty(fld_room_type) || Helper.isFieldEmpty(fld_room_bedNumber) || !isNumeric(fld_room_bedNumber.getText()) || Helper.isFieldEmpty(fld_room_stock) || !isNumeric(fld_room_stock.getText()) || Helper.isFieldEmpty(fld_room_price_child) || !isNumeric(fld_room_price_child.getText()) || Helper.isFieldEmpty(fld_room_price_adult) || !isNumeric(fld_room_price_adult.getText())) {
-                Helper.showMsg("Uyarı!", "İlgili alanları doğru şekilde doldurun");
+                Helper.showMessage("fill");
             } else {
                 if (detailManager.addHotelRoom(
                         hotel.getHotelID(),
@@ -238,7 +237,7 @@ public class EmployeeHotelDetailGUI extends Layout {
                         Integer.parseInt(fld_room_price_adult.getText())
                 )) {
                     loadHotelRoomList();
-                    Helper.showMsg("Başarılı", "Ekleme işlemi başarılı");
+                    Helper.showMessage("done");
                 }
             }
         });
@@ -257,7 +256,7 @@ public class EmployeeHotelDetailGUI extends Layout {
             date = LocalDate.parse(dateToCheck2, DATE_TIME_FORMATTER);
             return true;
         } catch (Exception e) {
-            Helper.showMsg("Uyarı!", "İstenilen formatta tarih giriniz");
+            Helper.showMessage("wrongDateFormat");
         }
         return false;
     }

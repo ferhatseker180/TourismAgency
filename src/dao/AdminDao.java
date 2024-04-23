@@ -62,7 +62,7 @@ public class AdminDao {
             int result = ps.executeUpdate();
             return result != -1;
         } catch (Exception e) {
-            Helper.showMsg("Error", "Database Error!!!");
+            Helper.showMessage("databaseError");
         }
         return false;
     }

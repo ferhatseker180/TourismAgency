@@ -23,7 +23,7 @@ public class ReservationGUI extends Layout {
 
         btn_reservation.addActionListener(e -> {
             if (Helper.isFieldEmpty(fld_customerName) || Helper.isFieldEmpty(fld_customerTcNo) || Helper.isFieldEmpty(fld_customerPhone) || Helper.isFieldEmpty(fld_customerEmail)) {
-                Helper.showMsg("Uyarı !", "İlgili alanları doldurun");
+                Helper.showMessage("fill");
             } else {
                 if (employeeManager.addReservation(
                         hotelID,
@@ -36,7 +36,7 @@ public class ReservationGUI extends Layout {
                         adultNumber)) {
                     employeeManager.decreaseStock(roomID);
                     gui.loadRezervationList();
-                    Helper.showMsg("Başarılı !", "Rezervasyon yapıldı");
+                    Helper.showMessage("done");
                 }
             }
         });

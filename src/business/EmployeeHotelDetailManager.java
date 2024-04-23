@@ -1,12 +1,12 @@
 package business;
 
-import dao.EmployeeHotelDetailDao;
+import dao.HotelDetailDao;
 import entity.*;
 
 import java.util.ArrayList;
 
 public class EmployeeHotelDetailManager {
-    private EmployeeHotelDetailDao employeeHotelDetailDao = new EmployeeHotelDetailDao();
+    private HotelDetailDao employeeHotelDetailDao = new HotelDetailDao();
 
     // Retrieves a list of seasons by hotel ID.
 

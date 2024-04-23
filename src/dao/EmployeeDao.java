@@ -101,7 +101,7 @@ public class EmployeeDao {
             deleteReservationByHotelID(hotelID);
             return result != -1;
         } catch (Exception e) {
-            Helper.showMsg("Hata", "Veri Tabanı Hatası!!!");
+            Helper.showMessage("databaseError");
         }
         return false;
     }
@@ -295,7 +295,7 @@ public class EmployeeDao {
             ps.close();
             return result != -1;
         } catch (Exception e) {
-            Helper.showMsg("Hata", "Veri Tabanı Hatası!!!");
+            Helper.showMessage("databseError");
         }
         return false;
     }

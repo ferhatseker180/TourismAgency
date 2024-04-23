@@ -9,7 +9,6 @@ import entity.Reservation;
 import dao.LoginDao;
 import entity.*;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -87,7 +86,7 @@ public class EmployeeGUI extends Layout {
         tbl_hotel_PopupMenu = new JPopupMenu();
         tbl_hotel_PopupMenu.add("Yönet").addActionListener(e -> {
             int selectedHotelID = Integer.parseInt(tbl_hotel.getValueAt(tbl_hotel.getSelectedRow(), 0).toString());
-            EmployeeHotelDetailGUI detailGUI = new EmployeeHotelDetailGUI(employeeManager.getHotelByID(selectedHotelID));
+            HotelDetailGUI detailGUI = new HotelDetailGUI(employeeManager.getHotelByID(selectedHotelID));
         });
         // otel bilgilerinin güncellenmesi
         tbl_hotel_PopupMenu.add("Güncelle").addActionListener(e -> {
@@ -105,7 +104,7 @@ public class EmployeeGUI extends Layout {
         tbl_hotel_PopupMenu.add("Sil").addActionListener(e -> {
             if (employeeManager.deleteHotel(Integer.parseInt(tbl_hotel.getValueAt(tbl_hotel.getSelectedRow(), 0).toString()))) {
                 loadHotelTable();
-                Helper.showMsg("Başarılı", "Otel Silindi");
+                Helper.showMessage("done");
             }
         });
         tbl_hotel.setComponentPopupMenu(tbl_hotel_PopupMenu); // menülerin çalışması için en son setledik
@@ -140,14 +139,14 @@ public class EmployeeGUI extends Layout {
                     Integer.parseInt(tbl_rezervations.getValueAt(tbl_rezervations.getSelectedRow(), 9).toString())
             )) {
                 loadRezervationList();
-                Helper.showMsg("Başarılı", "İşlem Güncellendi");
+                Helper.showMessage("done");
             }
         });
         tbl_rezervations_popup.add("Sil").addActionListener(e -> {
             if (employeeManager.deleteReservation(Integer.parseInt(tbl_rezervations.getValueAt(tbl_rezervations.getSelectedRow(), 0).toString()))) {
                 employeeManager.increaseStock(Integer.parseInt(tbl_rezervations.getValueAt(tbl_rezervations.getSelectedRow(), 3).toString()));
                 loadRezervationList();
-                Helper.showMsg("Başarılı", "Rezervasyon Silindi");
+                Helper.showMessage("done");
             }
         });
         tbl_rezervations.setComponentPopupMenu(tbl_rezervations_popup);
@@ -185,7 +184,7 @@ public class EmployeeGUI extends Layout {
             int adult_price = Integer.parseInt(tbl_search.getValueAt(tbl_search.getSelectedRow(), 15).toString());
 
             if (fld_startDate.getText().isEmpty() || fld_endDate.getText().isEmpty()) {
-                Helper.showMsg("Uyarı", "Uygun aralıkta tarih giriniz");
+                Helper.showMessage("wrongDateRange");
                 return;
             }
             int days = employeeManager.calculateDay(fld_startDate.getText(), fld_endDate.getText());
@@ -205,7 +204,7 @@ public class EmployeeGUI extends Layout {
         loadSearchTable();
         btn_addHotel.addActionListener(e -> {
             if (Helper.isFieldEmpty(fld_hotel_name) || Helper.isFieldEmpty(fld_hotel_email) || Helper.isFieldEmpty(fld_hotel_phoneNumber)) {
-                Helper.showMsg("Uyarı!", "İlgili alanların tamamını doldurunuz");
+                Helper.showMessage("fill");
             } else {
                 if (btn_addHotel.getText().equals("Güncelle")) {
                     employeeManager.updateHotel(
@@ -218,7 +217,7 @@ public class EmployeeGUI extends Layout {
                             fld_hotel_phoneNumber.getText(),
                             Integer.parseInt((String) cmb_hotel_star.getSelectedItem()));
                     loadHotelTable();
-                    Helper.showMsg("Başarılı", "Güncelleme İşlemi gerçekleşti");
+                    Helper.showMessage("done");
                 } else {
                     employeeManager.addHotel(
                             fld_hotel_name.getText(),
@@ -229,7 +228,7 @@ public class EmployeeGUI extends Layout {
                             fld_hotel_phoneNumber.getText(),
                             Integer.parseInt((String) cmb_hotel_star.getSelectedItem()));
                     loadHotelTable();
-                    Helper.showMsg("Başarılı", "Ekleme işlemi başarılı");
+                    Helper.showMessage("done");
                 }
             }
         });
@@ -246,7 +245,7 @@ public class EmployeeGUI extends Layout {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!employeeManager.isValidDates(fld_startDate.getText(), fld_endDate.getText())) {
-                    Helper.showMsg("Uyarı!", "Uygun değer aralığında tarih giriniz (Gün/Ay/Yıl)");
+                    Helper.showMessage("wrongDateFormat");
                 } else {
                     ArrayList<SearchResult> result = employeeManager.search(
                             employeeManager.searchQuery(
