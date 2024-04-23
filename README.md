@@ -45,6 +45,7 @@ The project was carried out in accordance with N-layer architecture.
 <div style="text-align:center; margin:10px;">
 <h3 style="text-align:center; color: yellow">  Application Video </h3>
 
+<p> <a href="https://youtu.be/06pNbobRT1c"> </a> </p>
 </div>
 
 <div style="margin:20px">
