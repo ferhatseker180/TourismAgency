@@ -334,7 +334,6 @@ public class HotelDetailGUI extends Layout {
     }
 
     public static boolean isNumeric(String maybeNumeric) {
-        // regex kullanıldı, girilen değerin uygun aralıkta olması için
         // We can use regex because we can check range of values
         return maybeNumeric != null && maybeNumeric.matches("[0-9]+");
     }
