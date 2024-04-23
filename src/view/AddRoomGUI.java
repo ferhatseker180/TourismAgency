@@ -27,7 +27,6 @@ public class AddRoomGUI extends Layout {
         this.roomID = roomID;
         add(container);
         guiInitialize(400, 400);
-        // kullanıcıya tabloyu göstermek için yapılan işlemler
         mdl_room_property = new DefaultTableModel();
         mdl_room_property.setColumnIdentifiers(new Object[]{"Oda Özellikleri"});
         row_room_property = new Object[1];
@@ -40,7 +39,6 @@ public class AddRoomGUI extends Layout {
             }
         });
 
-        // Tablo için oluşturulan jpopup menü
         JPopupMenu popup = new JPopupMenu();
         popup.add("Sil").addActionListener(e -> {
             detailManager.deleteRoomProperty(
@@ -65,7 +63,7 @@ public class AddRoomGUI extends Layout {
         });
     }
 
-    // oda özelliklerini göstermesi için tanımlanan metod
+    // Show Room Properties
     private void loadRoomPropertyList() {
         DefaultTableModel db = (DefaultTableModel) tbl_room_property.getModel();
         db.setRowCount(0);
