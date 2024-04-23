@@ -30,6 +30,14 @@ public class UserManager {
         return userDao.findFilterWorker(userRole);
     }
 
+    public boolean save(User user) {
+        return userDao.save(user);
+    }
+
+    public boolean update(User user) {
+        return userDao.update(user);
+    }
+
     public boolean delete(int userId) {
         return userDao.delete(userId);
     }

@@ -81,6 +81,41 @@ public class UserDao {
         return userList;
     }
 
+    public boolean save(User user) {
+        String query = "INSERT INTO public.tbl_user " + "(" + "tcno," + "username," + "password," + "name" + "surname" + "usertype" + ")" + "VALUES (?,?,?,?,?,?)";
+        try {
+            PreparedStatement pr = this.connection.prepareStatement(query);
+            pr.setString(1, user.getTcNo());
+            pr.setString(2, user.getUsername());
+            pr.setString(3, user.getPassword());
+            pr.setString(4, user.getName());
+            pr.setString(5, user.getSurname());
+            pr.setString(6, user.getUserType());
+            return pr.executeUpdate() != -1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public boolean update(User user) {
+        String query = "UPDATE public.tbl_user SET tcno = ?, username = ?, password = ?, name = ?, surname = ?, usertype = ? WHERE id = ?";
+        try {
+            PreparedStatement pr = this.connection.prepareStatement(query);
+            pr.setString(1, user.getTcNo());
+            pr.setString(2, user.getUsername());
+            pr.setString(3, user.getPassword());
+            pr.setString(4, user.getName());
+            pr.setString(5, user.getSurname());
+            pr.setString(6, user.getUserType());
+            pr.setInt(7, user.getUserID());
+            return pr.executeUpdate() != -1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean delete(int userId) {
         String query = "DELETE FROM public.tbl_user WHERE id = ? ";
         try {

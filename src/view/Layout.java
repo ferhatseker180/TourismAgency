@@ -50,4 +50,9 @@ public abstract class Layout extends JFrame {
         });
     }
 
+    public void userRole(JComboBox comboBox) {
+        comboBox.addItem("admin");
+        comboBox.addItem("employee");
+    }
+
 }
