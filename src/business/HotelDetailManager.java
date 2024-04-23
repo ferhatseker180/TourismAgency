@@ -5,7 +5,7 @@ import entity.*;
 
 import java.util.ArrayList;
 
-public class EmployeeHotelDetailManager {
+public class HotelDetailManager {
     private HotelDetailDao employeeHotelDetailDao = new HotelDetailDao();
 
     // Retrieves a list of seasons by hotel ID.

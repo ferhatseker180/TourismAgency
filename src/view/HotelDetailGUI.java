@@ -1,6 +1,6 @@
 package view;
 
-import business.EmployeeHotelDetailManager;
+import business.HotelDetailManager;
 import core.Helper;
 import entity.*;
 
@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 
 public class HotelDetailGUI extends Layout {
     private Hotel hotel;
-    private EmployeeHotelDetailManager detailManager = new EmployeeHotelDetailManager();
+    private HotelDetailManager detailManager = new HotelDetailManager();
     private JPanel container;
     private JTabbedPane tabbedPane;
     private JTable tbl_season;

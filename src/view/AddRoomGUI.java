@@ -1,6 +1,6 @@
 package view;
 
-import business.EmployeeHotelDetailManager;
+import business.HotelDetailManager;
 import core.Helper;
 import entity.RoomFeature;
 
@@ -17,12 +17,12 @@ public class AddRoomGUI extends Layout {
     private JButton btn_addRoomFeature;
     private JTable tbl_room_property;
 
-    private EmployeeHotelDetailManager detailManager;
+    private HotelDetailManager detailManager;
     private DefaultTableModel mdl_room_property;
     private Object[] row_room_property;
     int roomID;
 
-    public AddRoomGUI(EmployeeHotelDetailManager detailManager, int roomID) {
+    public AddRoomGUI(HotelDetailManager detailManager, int roomID) {
         this.detailManager = detailManager;
         this.roomID = roomID;
         add(container);
