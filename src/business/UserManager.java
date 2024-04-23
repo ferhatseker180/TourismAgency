@@ -26,20 +26,29 @@ public class UserManager {
         return userDao.getUserByID(id);
     }
 
-    public User match(ResultSet rs) {
-        User obj = new User();
-        try {
-            obj.setUserID(rs.getInt("id"));
-            obj.setTcNo(rs.getString("tcno"));
-            obj.setUsername(rs.getString("username"));
-            obj.setPassword(rs.getString("password"));
-            obj.setName(rs.getString("name"));
-            obj.setSurname(rs.getString("surname"));
-            obj.setUserType(rs.getString("usertype"));
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public ArrayList<User> findFilterWorker(String userRole) {
+        return userDao.findFilterWorker(userRole);
+    }
+
+    public boolean delete(int userId) {
+        return userDao.delete(userId);
+    }
+
+    public ArrayList<Object[]> getForTable(int size, ArrayList<User> users) {
+        ArrayList<Object[]> userList = new ArrayList<>();
+        for (User obj : users) {
+            int i = 0;
+            Object[] rowObject = new Object[size];
+            rowObject[i++] = obj.getUserID();
+            rowObject[i++] = obj.getTcNo();
+            rowObject[i++] = obj.getUsername();
+            rowObject[i++] = obj.getPassword();
+            rowObject[i++] = obj.getName();
+            rowObject[i++] = obj.getSurname();
+            rowObject[i++] = obj.getUserType();
+            userList.add(rowObject);
         }
-        return obj;
+        return userList;
     }
 
 }

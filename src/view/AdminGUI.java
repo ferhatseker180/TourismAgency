@@ -2,6 +2,7 @@ package view;
 
 import business.AdminManager;
 import business.LoginManager;
+import business.UserManager;
 import core.Helper;
 import dao.LoginDao;
 import entity.User;
@@ -12,111 +13,120 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 public class AdminGUI extends Layout {
-    private AdminManager adminManager = new AdminManager();
-    private JPanel wrapper;
-    private JTabbedPane tabbedPane1;
-    private JTable tbl_personel;
-    private DefaultTableModel mdl_personel;
-    private Object[] row_personel;
-    private JTextField fld_tcNo;
-    private JTextField fld_userName;
-    private JTextField fld_name;
-    private JTextField fld_surname;
-    private JComboBox cmb_userType;
-    private JButton btn_addUser;
-    private JTextField fld_password;
-    private User admin;
+    private JPanel container;
+    private JPanel admin_top_pnl;
+    private User user;
+    private UserManager userManager;
+    private JLabel admin_lbl_welcome;
+    private JTabbedPane admin_tab_menu;
+    private JButton admin_btn_logout;
+    private JPanel admin_pnl_worker;
+    private JRadioButton filter_admin_rdbtn;
+    private JRadioButton filter_employee_rdbtn;
+    private JButton admin_filter_btn;
+    private JButton admin_clear_btn;
+    private JTable admin_tbl_worker;
+    private JScrollPane admin_scroll_worker;
+    private ButtonGroup rd_filter_button;
+    private DefaultTableModel admin_user_table = new DefaultTableModel();
+    private JPopupMenu admin_user_menu;
+    private Object[] col_user;
 
-    public AdminGUI(User admin) {
-        this.admin = admin;
-        add(wrapper);
-        guiInitialize(800, 500);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                LoginGUI backToLogin = new LoginGUI(new LoginManager(new LoginDao()));
+    public AdminGUI(User user) {
+        this.user = user;
+        this.userManager = new UserManager();
+        this.guiInitialize(500, 500);
+        if (this.user == null) {
+            dispose();
+        }
+        rd_filter_button = new ButtonGroup();
+        this.add(container);
+        this.admin_lbl_welcome.setText("Welcome " + this.user.getName());
+
+        loadUserTable();
+        loadUserComponent();
+        loadExitComponent();
+    }
+
+    private void loadUserComponent() {
+        tableRowSelect(this.admin_tbl_worker);
+        this.admin_user_menu = new JPopupMenu();
+        this.admin_user_menu.add("New").addActionListener(e -> {
+            AdminManagementView adminManagementView = new AdminManagementView(new User());
+            adminManagementView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loadUserTable();
+                }
+            });
+        });
+
+        this.admin_filter_btn.addActionListener(e -> {
+            if (this.filter_admin_rdbtn.isSelected()) {
+                loadFilteredUserTable("admin");
+            }
+            if (this.filter_employee_rdbtn.isSelected()) {
+                loadFilteredUserTable("employee");
             }
         });
 
-        // tablonun kullanıcıya gösterilmesi yapılan işlem adımları
-        mdl_personel = new DefaultTableModel();
-        mdl_personel.setColumnIdentifiers(new Object[]{"Kullanıcı id", "TC", "Kullanıcı Adı", "Şifre", "Adı", "Soyadı", "Kullanıcı Tipi"});
-        row_personel = new Object[7];
-        tbl_personel.setModel(mdl_personel);
+        this.admin_clear_btn.addActionListener(e -> {
+            this.rd_filter_button.clearSelection();
+            loadUserTable();
 
-        // mouse listener
-        tbl_personel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                tbl_personel.setRowSelectionInterval(tbl_personel.rowAtPoint(e.getPoint()), tbl_personel.rowAtPoint(e.getPoint()));
-            }
         });
-        loadPersonelTable();
-        // personel listesi için oluşturulan JpopupMenü
-        JPopupMenu tbl_personel_popup = new JPopupMenu();
-        tbl_personel_popup.add("Güncelle").addActionListener(e -> {
-            if (adminManager.updateUser(
-                    // id sine göre kullanıcı seçilir
-                    Integer.parseInt(tbl_personel.getValueAt(tbl_personel.getSelectedRow(), 0).toString()),
-                    tbl_personel.getValueAt(tbl_personel.getSelectedRow(), 1).toString(),
-                    tbl_personel.getValueAt(tbl_personel.getSelectedRow(), 2).toString(),
-                    tbl_personel.getValueAt(tbl_personel.getSelectedRow(), 3).toString(),
-                    tbl_personel.getValueAt(tbl_personel.getSelectedRow(), 4).toString(),
-                    tbl_personel.getValueAt(tbl_personel.getSelectedRow(), 5).toString(),
-                    cmb_userType.getSelectedItem().toString()
-            )) {
-                loadPersonelTable();
-                Helper.showMessage("done");
-            } else {
-                Helper.showMessage("error");
-            }
-        });
-        tbl_personel_popup.add("Sil").addActionListener(e -> {
-            if (adminManager.deleteUser(Integer.parseInt(tbl_personel.getValueAt(tbl_personel.getSelectedRow(), 0).toString()))) {
-                loadPersonelTable();
-                Helper.showMessage("done");
-            } else {
-                Helper.showMessage("error");
-            }
-        });
-        tbl_personel.setComponentPopupMenu(tbl_personel_popup);
 
-        btn_addUser.addActionListener(e -> {
-            if (Helper.isFieldEmpty(fld_tcNo) || Helper.isFieldEmpty(fld_userName) || Helper.isFieldEmpty(fld_password) ||
-                    Helper.isFieldEmpty(fld_name) || Helper.isFieldEmpty(fld_surname)) {
-                Helper.showMessage("fill");
-            } else {
-                if (adminManager.addUser(
-                        fld_tcNo.getText(),
-                        fld_userName.getText(),
-                        fld_password.getText(),
-                        fld_name.getText(),
-                        fld_surname.getText(),
-                        cmb_userType.getSelectedItem().toString()
-                )) {
-                    loadPersonelTable();
+        this.admin_user_menu.add("Update").addActionListener(e -> {
+            int selectUserId = this.getTableSelectedRow(admin_tbl_worker, 0);
+            AdminManagementView adminManagementView = new AdminManagementView(this.userManager.getUserByID(selectUserId));
+            adminManagementView.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    loadUserTable();
+                }
+            });
+        });
+
+        this.admin_user_menu.add("Delete").addActionListener(e -> {
+            if (Helper.confirm("sure")) {
+                int selectUserId = this.getTableSelectedRow(admin_tbl_worker, 0);
+                if (this.userManager.delete(selectUserId)) {
                     Helper.showMessage("done");
+                    loadUserTable();
+                } else {
+                    Helper.showMessage("error");
                 }
             }
         });
+
+        this.admin_tbl_worker.setComponentPopupMenu(admin_user_menu);
     }
 
-    //  loadPersonelTable metodu Db de ki personel tablosunu kullanıcının göreceği formata dönüştürüyor
-    private void loadPersonelTable() {
-        DefaultTableModel db = (DefaultTableModel) tbl_personel.getModel();
-        db.setRowCount(0);
-        for (User user : adminManager.getUserList()) {
-            row_personel[0] = user.getUserID();
-            row_personel[1] = user.getTcNo();
-            row_personel[2] = user.getUsername();
-            row_personel[3] = user.getPassword();
-            row_personel[4] = user.getName();
-            row_personel[5] = user.getSurname();
-            row_personel[6] = user.getUserType();
-            mdl_personel.addRow(row_personel);
-        }
+    // It is the code block that provides the filtering process.
+    private void loadFilteredUserTable(String userRole) {
+        col_user = new Object[]{"ID", "TC", "User Name", "Password", "First Name", "Last Name", "User Role"};
+        ArrayList<User> userList = this.userManager.findFilterWorker(userRole);
+        ArrayList<Object[]> userObjects = this.userManager.getForTable(col_user.length, userList);
+        createTable(this.admin_user_table, this.admin_tbl_worker, col_user, userObjects);
+    }
+
+    // It is a function that allows listing all users in a table without filtering.
+    public void loadUserTable() {
+        col_user = new Object[]{"ID", "TC", "User Name", "Password", "First Name", "Last Name", "User Role"};
+        ArrayList<User> userList = this.userManager.findAll();
+        ArrayList<Object[]> userObjects = this.userManager.getForTable(col_user.length, userList);
+        createTable(this.admin_user_table, this.admin_tbl_worker, col_user, userObjects);
+    }
+
+    private void loadExitComponent() {
+        this.admin_btn_logout.addActionListener(e -> {
+            dispose();
+            System.out.println("You are being directed to the Login Page...");
+            LoginGUI loginGUI = new LoginGUI();
+        });
     }
 
 

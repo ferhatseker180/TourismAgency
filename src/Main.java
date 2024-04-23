@@ -8,6 +8,6 @@ import static core.Helper.setTheme;
 public class Main {
     public static void main(String[] args) {
 
-        LoginGUI run = new LoginGUI(new LoginManager(new LoginDao()));
+        LoginGUI run = new LoginGUI();
     }
 }

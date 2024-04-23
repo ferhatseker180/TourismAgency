@@ -65,6 +65,34 @@ public class UserDao {
         return user;
     }
 
+    public ArrayList<User> findFilterWorker(String userRole) {
+        ArrayList<User> userList = new ArrayList<>();
+        String sql = "SELECT * FROM public.tbl_user WHERE usertype = ? ORDER BY id ASC";
+        try {
+            PreparedStatement pr = connection.prepareStatement(sql);
+            pr.setString(1, userRole.toString());
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()) {
+                userList.add(this.match(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userList;
+    }
+
+    public boolean delete(int userId) {
+        String query = "DELETE FROM public.tbl_user WHERE id = ? ";
+        try {
+            PreparedStatement ps = this.connection.prepareStatement(query);
+            ps.setInt(1, userId);
+            return ps.executeUpdate() != -1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
     private User match(ResultSet rs) throws SQLException {
         return new User(rs.getInt("id"),
                 rs.getString("tcNo"),

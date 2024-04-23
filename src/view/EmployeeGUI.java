@@ -57,7 +57,7 @@ public class EmployeeGUI extends Layout {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                LoginGUI backToLogin = new LoginGUI(new LoginManager(new LoginDao()));
+                LoginGUI backToLogin = new LoginGUI();
             }
         });
         // Db de yer alan otellerin listesi için mdl_hotel_list(DefaultTableModel türünde) oluşturuldu

@@ -19,8 +19,8 @@ public class LoginGUI extends Layout {
     private User user;
     String selectedRole;
 
-    public LoginGUI(LoginManager loginManager) {
-        this.loginManager = loginManager;
+    public LoginGUI() {
+        this.loginManager = new LoginManager();
         this.userManager = new UserManager();
 
         this.add(container);

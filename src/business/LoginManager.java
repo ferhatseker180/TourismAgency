@@ -11,8 +11,8 @@ public class LoginManager {
 
     private final LoginDao loginDao;
 
-    public LoginManager(LoginDao loginDao) {
-        this.loginDao = loginDao;
+    public LoginManager() {
+        this.loginDao = new LoginDao();
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
