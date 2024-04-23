@@ -20,12 +20,17 @@ carry out customer reservation transactions on these screens.
 
 <div style="margin:10px;">
 <h3 style="text-align:center; color: yellow"> Screen Details: </h3>  
-<li> LoginGUI:  </li> 
-<li> AdminGUI: </li> 
-<li> AdminManagementView:  </li> 
-<li> EmployeeGUI:  </li> 
-<li> AddRoomGUI:  </li> 
-<li> ReservationGUI:  </li> 
+<li> LoginGUI: The login screen is the page where users log in. On this page, admin or employee logins are separated by buttons and controls are made in the background. </li> 
+
+<li> AdminGUI: This is the screen that welcomes those who log in to the system as admin, and both admins and employees are listed on this screen. The operations to be performed on the table can be selected with popup menus, you can also perform filtering operations with buttons, and you can switch to the new user adding screen from here. </li> 
+
+<li> AdminManagementView: Here, the necessary information for user addition or update is filled in, then the user addition or update process is completed. </li> 
+
+<li> EmployeeGUI: This page is the page where all transactions related to hotel management, detailed searches and reservations are managed. </li> 
+
+<li> AddRoomGUI: This is the page for adding rooms and adding features. </li> 
+
+<li> ReservationGUI: On this page, the reservation process is made, fee calculations etc. are made, and the reservation process is completed. </li> 
 
 
 </div>
