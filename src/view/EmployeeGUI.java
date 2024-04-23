@@ -121,6 +121,7 @@ public class EmployeeGUI extends Layout {
             }
         });
         // Update reservation knowledge
+
         JPopupMenu tbl_rezervations_popup = new JPopupMenu();
         tbl_rezervations_popup.add("Update").addActionListener(e -> {
             // Take choose of user's reservation col index
