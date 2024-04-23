@@ -52,6 +52,7 @@ public class AdminManagementView extends Layout {
                 this.user.setName(this.fld_name.getText());
                 this.user.setSurname(this.fld_surname.getText());
                 this.user.setTcNo(this.fld_tc.getText());
+                this.user.setUsername(this.fld_username.getText());
                 this.user.setPassword(new String(this.fld_password.getPassword()));
                 this.user.setUserType((String) this.cmb_user_role.getSelectedItem());
 

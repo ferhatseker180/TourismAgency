@@ -7,9 +7,9 @@ import java.sql.PreparedStatement;
 public class DBConnector {
     private Connection connection = null;
     private static DBConnector instance = null;
-    private final static String DB_URL = "jdbc:postgresql://localhost:5432/tourismagencyproject";
-    private final static String DB_USERNAME = "postgres";
-    private final static String DB_PASSWORD = "123456789";
+    private final static String DB_URL = "jdbc:mysql://localhost/patika_tourismagency";;
+    private final static String DB_USERNAME = "root";
+    private final static String DB_PASSWORD = "mysql";
 
     private DBConnector() {
         try {

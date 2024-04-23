@@ -7,15 +7,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class LoginDao {
-    public int login(String username_tcno, String password) {
-        String query = "SELECT * FROM tbl_user WHERE ((tcNo=? OR username=?) AND password=?)";
+    public int login(String username, String password, String userRole) {
+        String query = "SELECT id FROM tbl_user WHERE (username = ? AND usertype = ?) AND password = ?";
         try (PreparedStatement ps = DBConnector.getPreparedStatement(query)) {
-            ps.setString(1, username_tcno);
-            ps.setString(2, username_tcno);
+            ps.setString(1, username);
+            ps.setString(2, userRole);
             ps.setString(3, password);
             ResultSet rs = ps.executeQuery();
-            //ps.close();
-            //rs.close();
             if (rs.next()) {
                 return rs.getInt("id");
             }

@@ -20,9 +20,7 @@ public class LoginGUI extends Layout {
     String selectedRole;
 
     public LoginGUI() {
-        this.loginManager = new LoginManager();
         this.userManager = new UserManager();
-
         this.add(container);
         this.guiInitialize(500, 500);
 
@@ -32,6 +30,7 @@ public class LoginGUI extends Layout {
             if (Helper.isFieldListEmpty(checkedList) || Helper.isRadioButtonListEmpty(checkedRadioList)) {
                 Helper.showMessage("fill");
             } else {
+                selectedRole = null;
                 if (this.rd_admin.isSelected()) {
                     selectedRole = "admin";
                 }
