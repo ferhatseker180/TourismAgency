@@ -2,6 +2,7 @@
 <h1 style="text-align:center; color: yellow"> Tourism Agency Project </h1> 
 <p style="text-align:center;"> This project was developed with version 17 of the Java programming language. </p>
 </div>
+
 ---
 
 <div style="margin:10px;">
